@@ -13,7 +13,7 @@ public class GUI_AddAppntmt extends JFrame{
 	private JLabel lbl,lbl1;
 	private ImageIcon logo;
 	
-	public GUI_AddAppntmt() {
+	public GUI_AddAppntmt(String lastD) {
 		
 		f=new JFrame();
 		p=new JPanel();

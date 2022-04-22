@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.swing.*;
-public class GUI_Calendar extends JFrame {
+public class GUI_Calendar extends JFrame implements ActionListener {
 	
 	private JFrame f;
 	private JPanel btnp,p,cal,list,cal1,cal2,cal3;//cal1 einai gia to label tou mhna/xronou to cal2 gia label twn hmerwn to cal3 gia ta buttons
@@ -30,6 +30,8 @@ public class GUI_Calendar extends JFrame {
 	
 	private int currentMonth,currentYear,cDate,cMonth,cYear;
 	private Calendar calendar;
+	
+	private String lastD="0";
 	
 	public GUI_Calendar(){
 		
@@ -171,6 +173,7 @@ public class GUI_Calendar extends JFrame {
 				default:
 					break;
 			}
+			button.addActionListener(this);
 			buttons.add(button);
 		}
 		printCal(currentMonth,currentYear);
@@ -249,8 +252,11 @@ public class GUI_Calendar extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
-				new GUI_AddAppntmt();
+				if(Integer.valueOf(lastD)==0) {
+					JOptionPane.showMessageDialog(null,"Please select a valid day to add an Appointment!");
+				}else {
+					new GUI_AddAppntmt(lastD);
+				}
 			}
 		});
 		
@@ -327,6 +333,13 @@ public class GUI_Calendar extends JFrame {
 		}
 	}
 	
+	public void actionPerformed(ActionEvent event) {
+        if(((JButton) event.getSource()).getText().contains("_")) {
+        	lastD="0";
+        }else {
+        	lastD=((JButton) event.getSource()).getText();
+        }
+    }
 	public void readFile() {
 		
 	}
