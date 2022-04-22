@@ -57,7 +57,7 @@ public class GUI_Menu extends JFrame{
 		storage.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		
 	//Images
-		img=new ImageIcon("img/healthbit31.png");
+		img=new ImageIcon("img/epms2.png");
 		logo=new ImageIcon("img/db1.png");
 		
 	//Labels
