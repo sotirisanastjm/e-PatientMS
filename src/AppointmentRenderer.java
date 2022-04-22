@@ -27,9 +27,9 @@ public class AppointmentRenderer extends DefaultListCellRenderer {
 			double num=(appointment.getTime()-(int)appointment.getTime())*100;
 			setIcon(icon);
 			if(num!=0) {
-				setText(appointment.getFullname()+" "+(int)appointment.getTime()+":"+((int)num));
+				setText(appointment.getFullname()+" "+(int)appointment.getTime()+":"+((int)num)+" "+appointment.getDate());
 			}else {
-				setText(appointment.getFullname()+" "+(int)appointment.getTime()+":00");
+				setText(appointment.getFullname()+" "+(int)appointment.getTime()+":00"+" "+appointment.getDate());
 			}
 			return this;
 	    }

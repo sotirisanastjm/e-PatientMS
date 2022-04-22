@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
+import java.sql.SQLException;
 import java.text.Format;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,7 +23,7 @@ public class GUI_Calendar extends JFrame implements ActionListener {
 	private JList aplist;
 	private JScrollPane scrollpane;
 	
-	private JButton back,nextmonth,prevmonth,addap,delap,editap;
+	private JButton back,nextmonth,prevmonth,addap,delap,refresh;
 	private ArrayList<JButton> buttons;
 	
 	private ImageIcon logo,img;
@@ -31,6 +33,7 @@ public class GUI_Calendar extends JFrame implements ActionListener {
 	private int currentMonth,currentYear,cDate,cMonth,cYear;
 	private Calendar calendar;
 	
+	private DefaultListModel list1;
 	private String lastD="0";
 	
 	public GUI_Calendar(){
@@ -55,6 +58,10 @@ public class GUI_Calendar extends JFrame implements ActionListener {
 		back.setPreferredSize(new Dimension(250,50));
 		back.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		
+		refresh=new JButton("Refresh");
+		refresh.setPreferredSize(new Dimension(250,50));
+		refresh.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+		
 		nextmonth=new JButton("Next");
 		nextmonth.setPreferredSize(new Dimension (60,30));
 		nextmonth.setFont(new Font("Times New Roman",Font.BOLD,15));
@@ -65,15 +72,12 @@ public class GUI_Calendar extends JFrame implements ActionListener {
 		
 		addap=new JButton("Add Appointment");
 		addap.setPreferredSize(new Dimension (200,50));
-		addap.setFont(new Font("Times New Roman",Font.BOLD,20));
+		addap.setFont(new Font("Times New Roman",Font.PLAIN,22));
 
 		delap=new JButton("Delete Appointment");
-		delap.setPreferredSize(new Dimension (200,50));
-		delap.setFont(new Font("Times New Roman",Font.BOLD,20));
+		delap.setPreferredSize(new Dimension (220,50));
+		delap.setFont(new Font("Times New Roman",Font.PLAIN,22));
 		
-		editap=new JButton("Edit Appointment");
-		editap.setPreferredSize(new Dimension (200,50));
-		editap.setFont(new Font("Times New Roman",Font.BOLD,20));
 		//Images
 		logo=new ImageIcon("img/db1.png");
 		img=new ImageIcon("img/img_schedule.png");
@@ -92,14 +96,21 @@ public class GUI_Calendar extends JFrame implements ActionListener {
 		
 		
 		//Add-ons in the panels
+		btnp.add(refresh);
 		btnp.add(back);
 		btnp.add(addap);
 		btnp.add(delap);
 		btnp.add(Box.createVerticalStrut(60));
 		
 		//List for the appointments
-		DefaultListModel list1=new DefaultListModel();
-		list1.addElement(new Appointment("Sotiris Anastasiadis",13.00,1));
+		list1=new DefaultListModel();
+		DB_connection con=new DB_connection();
+		try {
+			list1=con.getAppointment();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		aplist=new JList(list1);
 		aplist.setCellRenderer(new AppointmentRenderer());
 		aplist.setFixedCellWidth(500);
@@ -247,6 +258,31 @@ public class GUI_Calendar extends JFrame implements ActionListener {
 			}
 		});
 		
+		refresh.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				new GUI_Calendar();
+				f.dispose();
+			}
+		});
+		
+		delap.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(aplist.getSelectedValuesList().size()>1) {
+					JOptionPane.showMessageDialog(null,"You can only pick one Appointment at the time..");
+				}else if(aplist.getSelectedValuesList().size()<1) {
+					JOptionPane.showMessageDialog(null,"You need to pick a Appointment");
+				}else {
+					con.delAppointment((Appointment)aplist.getSelectedValue());
+				}
+			}
+		});
+		
 		addap.addActionListener(new ActionListener() {
 
 			@Override
@@ -255,7 +291,8 @@ public class GUI_Calendar extends JFrame implements ActionListener {
 				if(Integer.valueOf(lastD)==0) {
 					JOptionPane.showMessageDialog(null,"Please select a valid day to add an Appointment!");
 				}else {
-					new GUI_AddAppntmt(lastD);
+					String d=currentYear+"-"+(currentMonth+1)+"-"+lastD;
+					new GUI_AddAppntmt(java.sql.Date.valueOf(d));
 				}
 			}
 		});
@@ -340,8 +377,5 @@ public class GUI_Calendar extends JFrame implements ActionListener {
         	lastD=((JButton) event.getSource()).getText();
         }
     }
-	public void readFile() {
-		
-	}
 }
 

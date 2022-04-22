@@ -5,7 +5,7 @@ public class DB_connection {
 	
 	Connection connection;
 	String driver="com.mysql.cj.jdbc.Driver";
-	String server="192.168.1.20";
+	String server="192.168.1.23";
 	String port="3306";
 	String db="epatientms";
 	String username="patient";
@@ -117,6 +117,46 @@ public class DB_connection {
 			statement.executeUpdate("DELETE FROM User WHERE amka='"+amka+"'");
 			statement.executeUpdate("DELETE FROM History WHERE amkaID='"+amka+"'");
 			statement.executeUpdate("DELETE FROM Patient WHERE amka='"+amka+"'");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		closeConnection();
+	}
+	public void delAppointment(Appointment ap) {
+		doConnection();
+		int amka=ap.getAmka();
+		try {
+			Statement statement=connection.createStatement();
+			statement.executeUpdate("DELETE FROM Appointment WHERE amka='"+amka+"'");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		closeConnection();
+	}
+	
+	public DefaultListModel getAppointment() throws SQLException {
+		doConnection();
+		DefaultListModel list=new DefaultListModel();
+		Statement statement=connection.createStatement();
+		ResultSet result=statement.executeQuery("SELECT * FROM Appointment ORDER BY date");
+		while(result.next()) {
+				list.addElement(new Appointment(result.getString(1),Double.valueOf(result.getString(2)),Integer.valueOf(result.getString(3)),
+						java.sql.Date.valueOf(result.getString(4)),Integer.valueOf(result.getString(5))));
+			}
+		statement.close();
+		return list;
+	}
+	
+	public void setAppointment(String name,double time,int priority,Date date,int amka) {
+		doConnection();
+		try {
+			Statement statement=connection.createStatement();
+			statement.executeUpdate("INSERT INTO Appointment(fullname,time,priority,date,amka) VALUES('"+name+"','"+time+"','"+priority+
+					"','"+date+"','"+amka+"')");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

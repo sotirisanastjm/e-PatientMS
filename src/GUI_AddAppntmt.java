@@ -1,5 +1,8 @@
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Date;
 
 import javax.swing.*;
 
@@ -9,25 +12,42 @@ public class GUI_AddAppntmt extends JFrame{
 	private JPanel p;
 	private JButton add;
 	private JTextField name;
+	private JTextField amka;
 	private JComboBox menu,menu1;
-	private JLabel lbl,lbl1;
+	private JLabel lbl,lbl1,lbl2;
 	private ImageIcon logo;
 	
-	public GUI_AddAppntmt(String lastD) {
+	private Date date;
+	public GUI_AddAppntmt(Date date) {
+		
+		this.date=date;
 		
 		f=new JFrame();
 		p=new JPanel();
+		
+		
 		add=new JButton("Add");
 		add.setPreferredSize(new Dimension(100,30));
 		add.setFont(new Font("Times New Roman",Font.BOLD,15));
-		name=new JTextField(25);
+		
+		
+		name=new JTextField(16);
+		amka=new JTextField(8);
+		
+		
 		lbl1=new JLabel();
 		lbl1.setFont(new Font("Times New Roman",Font.BOLD,15));
 		lbl1.setText("Full name :");
+		
+		lbl2=new JLabel();
+		lbl2.setFont(new Font("Times New Roman",Font.BOLD,15));
+		lbl2.setText("Amka :");
+		
 		lbl=new JLabel();
 		lbl.setFont(new Font("Times New Roman",Font.BOLD,15));
 		lbl.setText("Please select the time for the Appointment");
 		logo=new ImageIcon("img/db1.png");
+		
 		
 		String[] choices=new String[48];
 		int index=0;
@@ -56,19 +76,18 @@ public class GUI_AddAppntmt extends JFrame{
 			}
 		}
 		
-		String[] choices1=new String[3];
-		choices1[0]="Non-urgent";
-		choices1[1]="Urgent";
-		choices1[2]="Emergent";
+		String[] choices1= {"Non-urgent","Urgent","Emergent"};
 		
-		JComboBox<String> menu = new JComboBox<String>(choices);
+		menu = new JComboBox(choices);
 		menu.setVisible(true);
 		
-		JComboBox<String> menu1 = new JComboBox<String>(choices1);
+		menu1 = new JComboBox(choices1);
 		menu1.setVisible(true);
 		
 		p.add(lbl1);
 		p.add(name);
+		p.add(lbl2);
+		p.add(amka);
 		p.add(lbl);
 		p.add(menu);
 		p.add(menu1);
@@ -83,6 +102,31 @@ public class GUI_AddAppntmt extends JFrame{
 		f.setVisible(true);
 		f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
+		add.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				double time;
+				int priority;
+				
+				if(String.valueOf(menu1.getSelectedItem()).equals("Non-urgent")){
+					priority=0;
+				}else if(String.valueOf(menu1.getSelectedItem()).equals("Urgent")) {
+					priority=1;
+				}else {
+					priority=2;
+				}
+				String time1=(String) menu.getSelectedItem();
+				time1=time1.replace(":",".");
+				time=Double.valueOf(time1);
+				System.out.print(time1);
+				DB_connection con=new DB_connection();
+				con.setAppointment(name.getText(),time,priority,date,Integer.valueOf(amka.getText()));
+				f.dispose();
+			}
+			
+		});
 	}
 	
 }

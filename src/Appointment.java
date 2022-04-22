@@ -1,47 +1,45 @@
+import java.sql.Date;
 
 public class Appointment {
 	
 	private String fullname;
 	private	double time;
 	private int priority;
-	private int day;
-	private int month;
-	private int year;
-	
-	public Appointment(String fullname,double time,int priority) {
+	private Date date;
+	private int amka;
+	public Appointment(String fullname,double time,int priority,Date date,int amka) {
 		
 		this.fullname=fullname;
 		this.time=time;
 		this.priority=priority;
-		this.day=day;
-		this.month=month;
-		this.year=year;
+		this.date=date;
+		this.amka=amka;
 		
 	}
 
-	public int getDay() {
-		return day;
+	
+	
+	public Date getDate() {
+		return date;
 	}
 
-	public void setDay(int day) {
-		this.day = day;
+
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
-	public int getMonth() {
-		return month;
+
+
+	public int getAmka() {
+		return amka;
 	}
 
-	public void setMonth(int month) {
-		this.month = month;
+	public void setAmka(int amka) {
+		this.amka = amka;
 	}
 
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
+	
 
 	public String getFullname() {
 		return fullname;
