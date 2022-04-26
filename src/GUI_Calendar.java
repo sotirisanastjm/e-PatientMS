@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.Format;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -110,6 +111,15 @@ public class GUI_Calendar extends JFrame implements ActionListener {
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		}
+		for(int i=0;i<list1.getSize();i++) {
+			String a=currentYear+"-"+(currentMonth+1)+"-"+cDate;
+			Date listDate=((Appointment)list1.get(i)).getDate();
+			Date cD=java.sql.Date.valueOf(a);
+			if(listDate.compareTo(cD)<0) {
+				con.delAppointment(((Appointment)list1.get(i)));
+				list1.remove(i);
+			}
 		}
 		aplist=new JList(list1);
 		aplist.setCellRenderer(new AppointmentRenderer());
@@ -288,11 +298,15 @@ public class GUI_Calendar extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(Integer.valueOf(lastD)==0) {
-					JOptionPane.showMessageDialog(null,"Please select a valid day to add an Appointment!");
+				if(Integer.valueOf(lastD)<cDate) {
+					JOptionPane.showMessageDialog(null, "You need to pick a valid date!");
 				}else {
-					String d=currentYear+"-"+(currentMonth+1)+"-"+lastD;
-					new GUI_AddAppntmt(java.sql.Date.valueOf(d));
+					if(Integer.valueOf(lastD)==0) {
+						JOptionPane.showMessageDialog(null,"Please select a valid day to add an Appointment!");
+					}else {
+						String d=currentYear+"-"+(currentMonth+1)+"-"+lastD;
+						new GUI_AddAppntmt(java.sql.Date.valueOf(d));
+					}
 				}
 			}
 		});

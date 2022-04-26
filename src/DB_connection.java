@@ -142,7 +142,7 @@ public class DB_connection {
 		doConnection();
 		DefaultListModel list=new DefaultListModel();
 		Statement statement=connection.createStatement();
-		ResultSet result=statement.executeQuery("SELECT * FROM Appointment ORDER BY date");
+		ResultSet result=statement.executeQuery("SELECT * FROM Appointment ORDER BY date , time");
 		while(result.next()) {
 				list.addElement(new Appointment(result.getString(1),Double.valueOf(result.getString(2)),Integer.valueOf(result.getString(3)),
 						java.sql.Date.valueOf(result.getString(4)),Integer.valueOf(result.getString(5))));

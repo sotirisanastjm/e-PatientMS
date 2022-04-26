@@ -120,7 +120,6 @@ public class GUI_AddAppntmt extends JFrame{
 				String time1=(String) menu.getSelectedItem();
 				time1=time1.replace(":",".");
 				time=Double.valueOf(time1);
-				System.out.print(time1);
 				DB_connection con=new DB_connection();
 				con.setAppointment(name.getText(),time,priority,date,Integer.valueOf(amka.getText()));
 				f.dispose();
