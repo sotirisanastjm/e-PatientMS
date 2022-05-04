@@ -5,7 +5,7 @@ public class DB_connection {
 	
 	Connection connection;
 	String driver="com.mysql.cj.jdbc.Driver";
-	String server="192.168.1.23";
+	String server="192.168.2.4";
 	String port="3306";
 	String db="epatientms";
 	String username="patient";

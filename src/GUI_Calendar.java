@@ -290,6 +290,8 @@ public class GUI_Calendar extends JFrame implements ActionListener {
 				}else {
 					con.delAppointment((Appointment)aplist.getSelectedValue());
 				}
+				f.dispose();
+				new GUI_Calendar();
 			}
 		});
 		

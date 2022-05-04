@@ -48,33 +48,71 @@ public class GUI_AddAppntmt extends JFrame{
 		lbl.setText("Please select the time for the Appointment");
 		logo=new ImageIcon("img/db1.png");
 		
-		
-		String[] choices=new String[48];
-		int index=0;
-		for(int i=0;i<=11;i++) {
-			for(int j=0;j<=3;j++) {
-				switch(j) {
-				case 0:
-					choices[index]=String.valueOf(i+9)+":00";
-					index++;
-					break;
-				case 1:
-					choices[index]=String.valueOf(i+9)+":15";
-					index++;
-					break;
-				case 2:
-					choices[index]=String.valueOf(i+9)+":30";
-					index++;
-					break;
-				case 3:
-					choices[index]=String.valueOf(i+9)+":45";
-					index++;
-					break;
-				default:
-					break;
+		String[] choices;
+		String str1,str2,str3,str4;
+		str1=String.valueOf(String.valueOf(date).charAt(5))+String.valueOf(String.valueOf(date).charAt(6));
+		str2=String.valueOf(String.valueOf(date).charAt(8))+String.valueOf(String.valueOf(date).charAt(9));
+		str3=String.valueOf(String.valueOf(java.time.LocalDate.now()).charAt(5))+String.valueOf(String.valueOf(java.time.LocalDate.now()).charAt(6));
+		str4=String.valueOf(String.valueOf(java.time.LocalDate.now()).charAt(8))+String.valueOf(String.valueOf(java.time.LocalDate.now()).charAt(9));
+		if(str1.equals(str3) && str2.equals(str4)) {
+			String tm1=String.valueOf(String.valueOf(java.time.LocalTime.now()).charAt(0))+String.valueOf(String.valueOf(java.time.LocalTime.now()).charAt(1));
+			String tm2=String.valueOf(String.valueOf(java.time.LocalTime.now()).charAt(3))+String.valueOf(String.valueOf(java.time.LocalTime.now()).charAt(4));
+			choices=new String[48-(Integer.valueOf(tm1)-9)*4];
+			int index=0;
+			
+			for(int i=Integer.valueOf(tm1)-9;i<=11;i++) {
+				for(int j=0;j<=3;j++) {
+					switch(j) {
+					case 0:
+						choices[index]=String.valueOf(i+9)+":00";
+						index++;
+						break;
+					case 1:
+						choices[index]=String.valueOf(i+9)+":15";
+						index++;
+						break;
+					case 2:
+						choices[index]=String.valueOf(i+9)+":30";
+						index++;
+						break;
+					case 3:
+						choices[index]=String.valueOf(i+9)+":45";
+						index++;
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		}else {
+			choices=new String[48];
+			int index=0;
+			for(int i=0;i<=11;i++) {
+				for(int j=0;j<=3;j++) {
+					switch(j) {
+					case 0:
+						choices[index]=String.valueOf(i+9)+":00";
+						index++;
+						break;
+					case 1:
+						choices[index]=String.valueOf(i+9)+":15";
+						index++;
+						break;
+					case 2:
+						choices[index]=String.valueOf(i+9)+":30";
+						index++;
+						break;
+					case 3:
+						choices[index]=String.valueOf(i+9)+":45";
+						index++;
+						break;
+					default:
+						break;
+					}
 				}
 			}
 		}
+		
 		
 		String[] choices1= {"Non-urgent","Urgent","Emergent"};
 		
@@ -120,6 +158,7 @@ public class GUI_AddAppntmt extends JFrame{
 				String time1=(String) menu.getSelectedItem();
 				time1=time1.replace(":",".");
 				time=Double.valueOf(time1);
+				System.out.println(time);
 				DB_connection con=new DB_connection();
 				con.setAppointment(name.getText(),time,priority,date,Integer.valueOf(amka.getText()));
 				f.dispose();
