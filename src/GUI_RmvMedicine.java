@@ -89,7 +89,7 @@ public class GUI_RmvMedicine extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				DB_connection con=new DB_connection();
-				int n=JOptionPane.showConfirmDialog(null,"Are you sure you want to delete the medicine?","Hellooo",JOptionPane.YES_NO_OPTION);
+				int n=JOptionPane.showConfirmDialog(null,"Are you sure you want to delete the medicine?","Message",JOptionPane.YES_NO_OPTION);
 				if(n==JOptionPane.YES_OPTION) {
 					con.delMedicine(med);
 				}
