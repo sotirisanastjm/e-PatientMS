@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.*;
 
@@ -20,6 +21,8 @@ public class GUI_Pharmacy  extends JFrame{
 	private JLabel imglbl;
 	private ImageIcon img;
 	
+	private DefaultListModel mlist;
+	
 	public GUI_Pharmacy() {
 		
 		//Frames-Panels
@@ -30,7 +33,7 @@ public class GUI_Pharmacy  extends JFrame{
 		
 		//Image
 		imgp=new JPanel();
-		img=new ImageIcon("img/img_pharmacy.png");
+		img=new ImageIcon("img/img_pharmacy1.png");
 		imglbl=new JLabel(img);
 		
 		//Buttons
@@ -66,57 +69,55 @@ public class GUI_Pharmacy  extends JFrame{
 		logo=new ImageIcon("img/db1.png");
 		
 		//Labels
-		lbl1=new JLabel("Medicine List");
-		lbl1.setPreferredSize(new Dimension(250,50));
-		lbl1.setFont(new Font("Times New Roman", Font.BOLD, 24));
+		lbl1=new JLabel("<html><b>M<br>E<br>D<br>I<br>C<br>I<br>N<br>E<br><br>L<br>I<br>S<br>T</html>");
+		lbl1.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		
-		lbl2=new JLabel("Medicine Shopping List");
-		lbl2.setPreferredSize(new Dimension(250,50));
-		lbl2.setFont(new Font("Times New Roman", Font.BOLD, 24));
+		lbl2=new JLabel("<html><b>S<br>H<br>O<br>P<br>P<br>I<br>N<br>G<br><br>L<br>I<br>S<br>T</html>");
+		lbl2.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		
 		//List
 		
 		//For testing purposes
-		DefaultListModel list1=new DefaultListModel();
+		mlist=new DefaultListModel();
 		DefaultListModel list2=new DefaultListModel();
-		for(int i=0;i<=20;i++) {
-			list1.addElement(new Medicine("'Name'","'Company'",0));
-			list2.addElement(new Medicine("'Name'","'Company'",0));
+		
+		DB_connection con=new DB_connection();
+		try {
+			mlist=con.getPharmacy();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
-		list=new JList(list1);
+		
+		list=new JList(mlist);
 		list.setCellRenderer(new MedicineRenderer());
-		list.setPreferredSize(new Dimension(500,500));
+		list.setFixedCellHeight(50);
 		scrollPane1=new JScrollPane(list);
 		
 		listF=new JList(list2);
 		listF.setCellRenderer(new MedicineRenderer());
-		listF.setPreferredSize(new Dimension(500,500));
+		listF.setFixedCellHeight(50);
 		listF.setEnabled(false);
 		scrollPane2=new JScrollPane(listF);
 		
 		
 		
 		//Add-ons on the panels
-		btnp.add(Box.createHorizontalStrut(500));
 		btnp.add(addD);
 		btnp.add(rmD);
 		btnp.add(refD);
-		btnp.add(Box.createHorizontalStrut(500));
 		btnp.add(shortC);
-		btnp.add(refresh);
 		btnp.add(shortN);
-		btnp.add(Box.createHorizontalStrut(2000));
+		btnp.add(refresh);
 		btnp.add(back);
 		btnp.add(Box.createVerticalStrut(300));
 		
 		
-		listp.add(Box.createHorizontalStrut(400));
 		listp.add(lbl1);
-		listp.add(Box.createHorizontalStrut(200));
-		listp.add(lbl2);
-		listp.add(Box.createHorizontalStrut(350));
 		listp.add(scrollPane1);
+		listp.add(Box.createHorizontalStrut(100));
+		listp.add(lbl2);
 		listp.add(scrollPane2);
 		
 		imgp.add(imglbl);
@@ -131,7 +132,7 @@ public class GUI_Pharmacy  extends JFrame{
 		//Frame Settings
 		f.setTitle("e-Patient MS");
 		f.setIconImage(logo.getImage());
-		f.setResizable(false);
+		f.setResizable(true);
 		f.setContentPane(p);
 		f.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		f.setVisible(true);
@@ -145,6 +146,36 @@ public class GUI_Pharmacy  extends JFrame{
 				// TODO Auto-generated method stub
 				new GUI_Menu();
 				f.dispose();
+			}
+			
+		});
+		
+		rmD.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(listF.getSelectedValuesList().size()>=1) {
+					JOptionPane.showMessageDialog(null,"Please select medicine from the correct table");
+				}else {
+					if(list.getSelectedValuesList().size()>1) {
+						JOptionPane.showMessageDialog(null,"You can only pick one Medicine at the time..");
+					}else if(list.getSelectedValuesList().size()<1) {
+						JOptionPane.showMessageDialog(null,"You need to pick a Medicne");
+					}else {
+						new GUI_RmvMedicine((Medicine)list.getSelectedValue());
+					}
+				}
+			}
+			
+		});
+		
+		addD.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				new GUI_AddMedicine();
 			}
 			
 		});

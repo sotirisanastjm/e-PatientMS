@@ -36,12 +36,12 @@ public class GUI_AddAppntmt extends JFrame{
 		
 		
 		lbl1=new JLabel();
-		lbl1.setFont(new Font("Times New Roman",Font.BOLD,15));
-		lbl1.setText("Full name :");
+		lbl1.setFont(new Font("Times New Roman",Font.BOLD,16));
+		lbl1.setText("FULL NAME :");
 		
 		lbl2=new JLabel();
-		lbl2.setFont(new Font("Times New Roman",Font.BOLD,15));
-		lbl2.setText("Amka :");
+		lbl2.setFont(new Font("Times New Roman",Font.BOLD,16));
+		lbl2.setText("AMKA :");
 		
 		lbl=new JLabel();
 		lbl.setFont(new Font("Times New Roman",Font.BOLD,15));
@@ -158,7 +158,6 @@ public class GUI_AddAppntmt extends JFrame{
 				String time1=(String) menu.getSelectedItem();
 				time1=time1.replace(":",".");
 				time=Double.valueOf(time1);
-				System.out.println(time);
 				DB_connection con=new DB_connection();
 				con.setAppointment(name.getText(),time,priority,date,Integer.valueOf(amka.getText()));
 				f.dispose();

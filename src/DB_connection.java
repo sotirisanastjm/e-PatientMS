@@ -3,9 +3,10 @@ import java.sql.*;
 import javax.swing.DefaultListModel;
 public class DB_connection {
 	
+	private static final String Medicine = null;
 	Connection connection;
 	String driver="com.mysql.cj.jdbc.Driver";
-	String server="192.168.2.4";
+	String server="192.168.2.5";
 	String port="3306";
 	String db="epatientms";
 	String username="patient";
@@ -47,6 +48,61 @@ public class DB_connection {
 		}
 		statement.close();
 		return plist;
+	}
+	
+	public DefaultListModel getPharmacy() throws SQLException {
+		doConnection();
+		DefaultListModel mlist=new DefaultListModel();
+		Statement statement=connection.createStatement();
+		ResultSet result=statement.executeQuery("SELECT * FROM Pharmacy");
+		while(result.next()) {
+			Medicine med=new Medicine(result.getString(1),result.getString(2),Integer.valueOf(result.getString(3)));
+			med.setId(Integer.valueOf(result.getString(4)));
+			mlist.addElement(med);
+		}
+		statement.close();
+		return mlist;
+	}
+	
+	public void setMedicine(Medicine med) {
+		doConnection();
+		try {
+			Statement statement=connection.createStatement();
+			statement.executeUpdate("INSERT INTO Pharmacy(medname,medcompany,quantity) VALUES('"+med.getName()+"','"+med.getCompany()+"','"+med.getQuantity()+"')");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		closeConnection();
+	}
+	
+	public void delMedicine(Medicine med) {
+		doConnection();
+		int id=med.getId();
+		try {
+			Statement statement=connection.createStatement();
+			statement.executeUpdate("DELETE FROM Pharmacy WHERE id='"+id+"'");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		closeConnection();
+	}
+	
+	public void removeMedicine(Medicine med,int q) {
+		doConnection();
+		int id=med.getId();
+		try {
+			Statement statement=connection.createStatement();
+			statement.executeUpdate("UPDATE Pharmacy SET quantity="+q+" WHERE id='"+id+"'");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		closeConnection();
 	}
 	
 	public String[] getHistory(int amka) {

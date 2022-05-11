@@ -4,13 +4,21 @@ public class Medicine {
 	private String name;
 	private String company;
 	private int quantity;
+	private int id;
 	
 	public Medicine(String name,String company,int quantity) {
 		
 		this.name=name;
 		this.company=company;
 		this.quantity=quantity;
-	
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getName() {
